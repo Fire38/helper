@@ -75,7 +75,7 @@ WSGI_APPLICATION = 'helper.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -85,7 +85,7 @@ DATABASES = {
         'HOST': config('DB_HOST'),
         'PORT': '5432'
     }
-}
+}"""
 
 DATABASES={'default': dj_database_url.config(default=config('DATABASE_URL'))}
 # Password validation
