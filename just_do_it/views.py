@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from .models import Rubric, Target, Task
+from django.contrib.auth.models import User
 # Create your views here.
 import datetime
 
@@ -8,6 +9,7 @@ import datetime
 def index(request):
     tasks = Task.objects.filter(target__isnull=True).filter(finish_date__gte=datetime.date.today()).exclude(complete=True)
     targets = Target.objects.filter(finish_date__gte=datetime.date.today()).exclude(complete=True)
+    print(request.user)
     return render(request, 'just_do_it/index.html', {'tasks': tasks, 'targets': targets})
 
 
