@@ -9,6 +9,7 @@ RUBRIC_CHOICES = (
     ('OTHER', 'Другое')
     )   
 
+
 class Rubric(models.Model):
     title = models.CharField(max_length=100)
 
@@ -31,7 +32,7 @@ class Task(models.Model):
     start_date = models.DateField()
     finish_date = models.DateField()
     complete = models.BooleanField()
-    #rubric = models.CharField(max_length=10, choices=RUBRIC_CHOICES, default='OTHER')
+    # rubric = models.CharField(max_length=10, choices=RUBRIC_CHOICES, default='OTHER')
     target = models.ForeignKey(Target, on_delete=models.CASCADE, blank=True, null=True)
     rubric = models.ForeignKey(Rubric, on_delete=models.SET_NULL, blank=True, null=True)
 

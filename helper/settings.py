@@ -75,7 +75,7 @@ WSGI_APPLICATION = 'helper.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-"""
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -85,9 +85,9 @@ DATABASES = {
         'HOST': config('DB_HOST'),
         'PORT': '5432'
     }
-}"""
+}
 
-DATABASES={'default': dj_database_url.config(default=config('DATABASE_URL'))}
+# DATABASES={'default': dj_database_url.config(default=config('DATABASE_URL'))}
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
 
@@ -109,8 +109,10 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.vk.VKOAuth2',
     'django.contrib.auth.backends.ModelBackend',
-    )
+)
 
+
+# social-django
 SOCIAL_AUTH_VK_OAUTH2_KEY = config('SOCIAL_AUTH_VK_OAUTH2_KEY')
 SOCIAL_AUTH_VK_OAUTH2_SECRET = config('SOCIAL_AUTH_VK_OAUTH2_SECRET')
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['friends']
@@ -119,6 +121,7 @@ LOGIN_URL = 'login/vk-oauth2'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/

@@ -6,80 +6,92 @@
 
 {% block greeting_block %}
 	{% if user.is_authenticated %}
-		Привет, {{ user.first_name }}!
+		Привет, {% if user.first_name %} 
+					{{ user.first_name }}
+				{% else %}
+					{{ user.username }}
+				{% endif %}!
+		<a href="{% url 'logout_user' %}">Выход</a>
 	{% else %}
-						<a href="{% url 'social:begin' 'vk-oauth2' %}">Тык</a>
-
+		<form method="POST" action="{% url 'login_user' %}">
+		{% csrf_token %}
+		{{ form }}
+		<input type="submit" value="Войти">
+	</form>
+		<a class="btn btn-dark" href="{% url 'register' %}">Зарегистрироваться</a>
+		<a href="{% url 'social:begin' 'vk-oauth2' %}">Зайти через вк</a>
 	{% endif %}
 
 {% endblock %}
 {% block body_block %}
-{{ user.first_name }}
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-6">
-				<hr>
-				<h3> Мои цели </h3>
-				<button>Добавить</button>
-				<a href="{% url 'target_archive' %}">Архив</a>
-				<!--<a href="/login/login/vk-oauth2/">Тык</a>-->
-				<a href="{% url 'social:begin' 'vk-oauth2' %}">Войти</a>
-				<hr>
-				{% if targets %}
-				
+			{% if user.is_authenticated %}
+				<div class="col-6">
+					<hr>
+					<h3> Мои цели </h3>
+					<a class="btn btn-primary" href="#">Добавить</a>
+					<a class="btn btn-primary" href="{% url 'target_archive' %}">Архив</a>
+					<!--<a href="/login/login/vk-oauth2/">Тык</a>-->
+					<hr>
+					{% if targets %}
 					
-					{% for target in targets %}
-						<div class="accordion" id="accordionTarget">
-							<div class="card">
-								<button class="btn  text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-									<div class="card-header">
-										{{ target }} {{ target.start_date }} - {{ target.finish_date}}
-									</div>
-								</button>								
-								
-								<div id="collapseOne" class="collapse " aria-labelledby="headingOne" data-parent="#accordionTarget">
-									<div class="list-group">
-										<form method="POST" action="{% url 'target_processing' target.id %}">
-											{% csrf_token %}
-											{% for task in target.task_set.all %}
-												<div class="card-body">
-													<div class="d-flex w-100 justify-content-between">
-														<input type="checkbox" name="{{ task.id }}" id="{{ task.id }}" {% if task.complete is True %} checked="checked" {% endif %}>
-													    <h6 class="mb-1 text-left">{{ task.title }}</h6>
-														<small>{{ task.start_date }} - {{ task.finish_date }}</small>
-												    </div>
-												</div>
-											{% endfor %}
-											<input class="btn btn-primary" type="submit">
-										</form>
-									</div>
+						
+						{% for target in targets %}
+							<div class="accordion" id="accordionTarget">
+								<div class="card">
+									<button class="btn  text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+										<div class="card-header">
+											{{ target }} {{ target.start_date }} - {{ target.finish_date}}
+										</div>
+									</button>								
 									
-								</div></div>
-								
-						</div>
-					{% endfor %}
+									<div id="collapseOne" class="collapse " aria-labelledby="headingOne" data-parent="#accordionTarget">
+										<div class="list-group">
+											<form method="POST" action="{% url 'target_processing' target.id %}">
+												{% csrf_token %}
+												{% for task in target.task_set.all %}
+													<div class="card-body">
+														<div class="d-flex w-100 justify-content-between">
+															<input type="checkbox" name="{{ task.id }}" id="{{ task.id }}" {% if task.complete is True %} checked="checked" {% endif %}>
+														    <h6 class="mb-1 text-left">{{ task.title }}</h6>
+															<small>{{ task.start_date }} - {{ task.finish_date }}</small>
+													    </div>
+													</div>
+												{% endfor %}
+												<input class="btn btn-primary" type="submit">
+											</form>
+										</div>
+										
+									</div></div>
+									
+							</div>
+						{% endfor %}
+						
 					
-				
-				{% else %}
-					Поставь себе цель и иди к ней;)
-				{% endif %}
-			</div>
-		
+					{% else %}
+						Поставь себе цель и иди к ней;)
+					{% endif %}
+				</div>
+			
 
-			<div class="col-6">
-				<hr>
-				<h3> Мои дела </h3>
-				<button>Добавить</button>
-				<a href="{% url 'target_archive' %}">Архив</a>
-				<hr>
-				{% if tasks %}
-					{% for task in tasks %}
-						{{ task }} <br/>
-					{% endfor %}
-				{% else %}
+				<div class="col-6">
+					<hr>
+					<h3> Мои дела </h3>
+					<a class="btn btn-primary" href="#">Добавить</a>
+					<a class="btn btn-primary" href="{% url 'target_archive' %}">Архив</a>
+					<hr>
+					{% if tasks %}
+						{% for task in tasks %}
+							{{ task }} <br/>
+						{% endfor %}
+					{% else %}
 
-				{% endif %}
-			</div>
+					{% endif %}
+				</div>
+			{% else %}
+				Авторизируйтесь чтобы посмотреть 
+			{% endif %}
 		</div>
 	</div>
 

@@ -1,0 +1,13 @@
+{% extends 'just_do_it/base.html' %}
+
+{% block title_block %}
+	Регистрация
+{% endblock %}
+
+{% block body_block %}
+	<form method="POST" action="{% url 'register' %}">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" value="Зарегистрироваться">
+	</form>
+{% endblock %}
